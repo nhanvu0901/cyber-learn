@@ -55,6 +55,15 @@ class LoadTestTests(unittest.TestCase):
         self.assertEqual(stage['errors'], 0)
         self.assertTrue(stage['passed'])
 
+    def test_single_numeric_rate_runs_one_stage(self):
+        for rate in (1, 1.5):
+            with self.subTest(rate=rate):
+                results = self.run_load(rates=rate, stage_seconds=0.1)
+                self.assertEqual(len(results), 1)
+                self.assertEqual(results[0]['target_rps'], rate)
+                self.assertEqual(results[0]['requests'], 1)
+                self.assertTrue(results[0]['passed'])
+
     def test_slow_body_measured_and_pending_work_is_bounded(self):
         stage = self.run_load('/slow', rates=(20,), stage_seconds=0.3,
                               max_workers=1)[0]
@@ -94,6 +103,7 @@ class LoadTestTests(unittest.TestCase):
             with self.subTest(url=url), self.assertRaises(ValueError):
                 main.run_load_test(url)
         for options in ({'rates': ()}, {'rates': (0,)}, {'rates': (float('nan'),)},
+                        {'rates': 0}, {'rates': float('nan')},
                         {'stage_seconds': -1}, {'stage_seconds': float('inf')},
                         {'max_workers': 0}, {'timeout_seconds': 0},
                         {'max_error_rate': 2}, {'max_p95_seconds': 0}):

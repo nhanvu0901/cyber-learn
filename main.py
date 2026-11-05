@@ -20,6 +20,8 @@ CONFIG = {
 
     # Số request/giây MỤC TIÊU cho từng mức, chạy lần lượt từ trái sang phải.
     # (1, 5, 10, 20) nghĩa là 4 mức tải; đây không phải số người dùng đồng thời.
+    # Một mức: 100, [100] hoặc (100,). Python coi (100) là số, cũng được hỗ trợ.
+    # Nhiều mức: [1, 5, 10, 20] hoặc (1, 5, 10, 20).
     "rates": (1, 5, 10, 20),
 
     # Thời gian phát request ở MỖI mức, đơn vị giây.
@@ -109,7 +111,7 @@ def run_load_test(
             or parsed.username is not None or parsed.password is not None):
         raise ValueError('Cần URL http:// hoặc https:// hợp lệ, không chứa mật khẩu')
     _ = parsed.port  # Validate before starting workers.
-    rates = tuple(rates)
+    rates = (rates,) if isinstance(rates, (int, float)) else tuple(rates)
     positive_values = (*rates, stage_seconds, timeout_seconds, max_p95_seconds)
     if not rates or any(not math.isfinite(v) or v <= 0 for v in positive_values):
         raise ValueError('Tốc độ, thời lượng, timeout và ngưỡng p95 phải dương, hữu hạn')
