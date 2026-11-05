@@ -1,0 +1,30 @@
+# Tài liệu nội bộ, gồm thông tin truy cập Windows Server.
+/docs/
+
+# Môi trường Python và tệp sinh tự động.
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Cấu hình cá nhân của IDE và công cụ đánh giá.
+.idea/
+.vscode/
+.jbeval/
+
+# Biến môi trường, khóa và chứng chỉ riêng.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.pfx
+*.p12
+
+# Tệp hệ điều hành và log khi chạy.
+.DS_Store
+Thumbs.db
+*.log
